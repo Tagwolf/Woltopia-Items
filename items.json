@@ -2,13 +2,13 @@
   {
     "name": "Frühlings-Spawner",
     "category": "Frühling",
-    "texture": "https://imgur.com/a/SoCO7Bo",
+    "texture": "https://i.imgur.com/iNh8iSy.png",
     "description": "Ein Frühlings-Spawner."
   },
   {
     "name": "Weihnachts-Geschenk",
     "category": "Weihnachten",
-    "texture": "https://imgur.com/6iVgXvF",
+    "texture": "https://i.imgur.com/6iVgXvF.png",
     "description": "Limitierte Weihnachtsbelohnung."
   }
 ]
