@@ -73,6 +73,12 @@
 
     .search {
       margin-bottom: 20px;
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: none;
+      outline: none;
     }
 
     .items {
@@ -104,6 +110,7 @@
     .itemName {
       margin-top: 8px;
       font-size: 0.9em;
+      user-select: none;
     }
 
     footer {
@@ -112,6 +119,16 @@
       text-align: center;
       border-top: 2px solid #222;
       color: #aaa;
+      font-size: 0.9em;
+    }
+
+    footer a {
+      color: #f39c12;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
 
     .modal {
@@ -141,6 +158,7 @@
       box-shadow: 0 0 20px #f39c12aa;
       position: relative;
       animation: fadeIn 0.3s ease;
+      color: #eee;
     }
 
     .modal-content img {
@@ -153,12 +171,14 @@
     .modal-content h2 {
       color: #f39c12;
       margin-bottom: 10px;
+      user-select: none;
     }
 
     .modal-content p {
       font-size: 0.95em;
       margin-bottom: 8px;
       color: #ccc;
+      user-select: none;
     }
 
     .close-button {
@@ -168,6 +188,7 @@
       font-size: 22px;
       color: #fff;
       cursor: pointer;
+      user-select: none;
     }
 
     @keyframes fadeIn {
@@ -178,7 +199,7 @@
 </head>
 <body>
   <header>
-    <img src="https://i.imgur.com/G8D6fHY.png" alt="WolfTopia Logo">
+    <img src="https://i.imgur.com/G8D6fHY.png" alt="WolfTopia Logo" />
     <h1>WolfTopia Items</h1>
   </header>
   <main>
@@ -187,18 +208,18 @@
       <ul id="categoryList"></ul>
     </nav>
     <div class="content">
-      <input class="search" id="searchInput" type="text" placeholder="Suche nach Itemnamen...">
+      <input class="search" id="searchInput" type="text" placeholder="Suche nach Itemnamen..." />
       <div class="items" id="itemContainer"></div>
     </div>
   </main>
   <footer>
-    &copy; 2025 WolfTopia • <a href="https://discord.gg/wolftopia" target="_blank" style="color:#f39c12">Discord beitreten</a>
+    &copy; 2025 WolfTopia • <a href="https://discord.gg/wolftopia" target="_blank" rel="noopener noreferrer">Discord beitreten</a>
   </footer>
 
-  <div id="itemModal" class="modal hidden">
+  <div id="itemModal" class="modal hidden" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <img id="modalImage" src="" alt="Item">
+      <span class="close-button" role="button" aria-label="Schließen">&times;</span>
+      <img id="modalImage" src="" alt="Item" />
       <h2 id="modalName">Item Name</h2>
       <p><strong>Kategorie:</strong> <span id="modalCategory"></span></p>
       <p id="modalDescription"></p>
@@ -214,14 +235,37 @@
         items = data;
         renderCategories();
         renderItems(items);
+      })
+      .catch(e => {
+        console.error("Fehler beim Laden der items.json:", e);
+        itemContainer.innerHTML = "<p style='color:#f39c12;'>Fehler beim Laden der Items.</p>";
       });
 
     const categoryList = document.getElementById("categoryList");
     const itemContainer = document.getElementById("itemContainer");
     const searchInput = document.getElementById("searchInput");
+    const itemModal = document.getElementById("itemModal");
+    const modalImage = document.getElementById("modalImage");
+    const modalName = document.getElementById("modalName");
+    const modalCategory = document.getElementById("modalCategory");
+    const modalDescription = document.getElementById("modalDescription");
+    const closeButton = document.querySelector(".close-button");
 
     function renderCategories() {
-      const categories = [...new Set(items.map(item => item.category))];
+      // Feste Reihenfolge + Kategorien, auch wenn Items fehlen
+      const categories = [
+        "Admin Items",
+        "Teamler Items",
+        "Sommer",
+        "Winter",
+        "Frühling",
+        "Halloween event",
+        "Ostern",
+        "Weihnachten",
+        "Bug items",
+        "Angeln"
+      ];
+
       categoryList.innerHTML = "";
       categories.forEach(category => {
         const li = document.createElement("li");
@@ -232,41 +276,73 @@
         });
         categoryList.appendChild(li);
       });
+
+      // "Alle" anzeigen
+      const allLi = document.createElement("li");
+      allLi.textContent = "Alle";
+      allLi.style.fontWeight = "bold";
+      allLi.style.marginTop = "15px";
+      allLi.style.cursor = "pointer";
+      allLi.addEventListener("click", () => renderItems(items));
+      categoryList.appendChild(allLi);
     }
 
     function renderItems(itemList) {
-      itemContainer.innerHTML = itemList
-        .filter(item => item.name.toLowerCase().includes(searchInput.value.toLowerCase()))
+      const searchTerm = searchInput.value.toLowerCase();
+      const filtered = itemList.filter(item =>
+        item.name.toLowerCase().includes(searchTerm)
+      );
+      itemContainer.innerHTML = filtered
         .map(item => createItemHTML(item))
         .join("");
+      if(filtered.length === 0){
+        itemContainer.innerHTML = `<p style="color:#f39c12;">Keine Items gefunden.</p>`;
+      }
     }
 
     function createItemHTML(item) {
+      // Escape für onclick JSON, um Probleme zu vermeiden
+      const safeItem = JSON.stringify(item).replace(/'/g, "\\'");
       return `
-        <div class="itemCard" title="${item.name}" onclick='showItemDetails(${JSON.stringify(item).replace(/'/g, "\\'")})'>
+        <div class="itemCard" title="${item.name}" onclick='showItemDetails(${safeItem})'>
           <img src="${item.texture}" alt="${item.name}" class="itemImage" />
           <div class="itemName">${item.name}</div>
         </div>
       `;
     }
 
-    searchInput.addEventListener("input", () => renderItems(items));
-
     function showItemDetails(item) {
-      document.getElementById("modalImage").src = item.texture;
-      document.getElementById("modalName").textContent = item.name;
-      document.getElementById("modalCategory").textContent = item.category || "Unbekannt";
-      document.getElementById("modalDescription").textContent = item.description || "Keine Beschreibung vorhanden.";
-      document.getElementById("itemModal").classList.remove("hidden");
+      modalImage.src = item.texture;
+      modalImage.alt = item.name;
+      modalName.textContent = item.name;
+      modalCategory.textContent = item.category;
+      modalDescription.textContent = item.description || "Keine Beschreibung vorhanden.";
+      itemModal.classList.remove("hidden");
+      itemModal.focus();
     }
 
-    document.querySelector(".close-button").addEventListener("click", () => {
-      document.getElementById("itemModal").classList.add("hidden");
+    closeButton.addEventListener("click", () => {
+      itemModal.classList.add("hidden");
     });
 
+    // Schließen, wenn außerhalb des Modals geklickt wird
+    itemModal.addEventListener("click", e => {
+      if (e.target === itemModal) {
+        itemModal.classList.add("hidden");
+      }
+    });
+
+    // Suchfeld Eingabe
+    searchInput.addEventListener("input", () => {
+      // Wenn gerade Kategorie gefiltert, filtere diese weiter
+      // Da wir keine globale Kategorie speichern, zeigen wir alle Items, gefiltert per Suche
+      renderItems(items);
+    });
+
+    // Modal mit Escape schließen
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        document.getElementById("itemModal").classList.add("hidden");
+      if (e.key === "Escape" && !itemModal.classList.contains("hidden")) {
+        itemModal.classList.add("hidden");
       }
     });
   </script>
