@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Adminschwert",
+    "category": "Admin Items",
+    "texture": "https://textures.minecraft.net/texture/9bd41a5b6fd0586f30c3ef9b34eae3fcf07c473b88caa6a109c2099bb2dfc6"
+  },
+  {
+    "name": "Teamler Axt",
+    "category": "Teamler Items",
+    "texture": "https://textures.minecraft.net/texture/3f18ac1169f33bfb953eef40c587ebdbd5404dc3a255c6d5b7643739ad4c3"
+  },
+  {
+    "name": "Sommerhut 2023",
+    "category": "Sommer",
+    "texture": "https://textures.minecraft.net/texture/8793cfae2b11ad2ff8e1c47ffb4ef1c8a108c84f1c22f595b6796f94d5cb1"
+  },
+  {
+    "name": "Eislanze",
+    "category": "Winter",
+    "texture": "https://textures.minecraft.net/texture/ebe9457c83bc90cd1f502850aa6b5d48f8f0a22e3c6c92d31dd6c7cc7478c"
+  },
+  {
+    "name": "Frühlingsblume",
+    "category": "Frühling",
+    "texture": "https://textures.minecraft.net/texture/24bb540dc1e858b505f19f58218f36e1d9d8a57fbe682f38c3657f76d2f46"
+  },
+  {
+    "name": "Kürbismaske",
+    "category": "Halloween event",
+    "texture": "https://textures.minecraft.net/texture/5b7d8a6c64aa03f3c5e8ecf57f3be682eb62324e187f35e65b3cd9fffc345"
+  },
+  {
+    "name": "Osterhase Helm",
+    "category": "Ostern",
+    "texture": "https://textures.minecraft.net/texture/fdf84d2d12cc5318c7341c3be1a5d03bb167aa5253f4c0edb06073e24b9dc"
+  },
+  {
+    "name": "Weihnachtsstern",
+    "category": "Weihnachten",
+    "texture": "https://textures.minecraft.net/texture/bd12fd3ed7c918c4f10d4d89e8ed49cdd21940e94c90e60b8c5ccf78b133"
+  },
+  {
+    "name": "Bug-Fackel",
+    "category": "Bug items",
+    "texture": "https://textures.minecraft.net/texture/cc6e537eef1d2c6b7c761c7ac394b78f7a65c6a9cced731f8e88a1ee8981a"
+  },
+  {
+    "name": "Legendäre Angel",
+    "category": "Angeln",
+    "texture": "https://textures.minecraft.net/texture/03aa1dced61d91a3d715e5c98e90a2e43a0ec1f948a4a64d3bdb7b88b4d4c"
+  }
+]
