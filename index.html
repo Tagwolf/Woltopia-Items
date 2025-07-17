@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WolfTopia Items</title>
+  <style>
+    /* Grundlegender Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background-color: #111;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #222;
+    }
+
+    #header-logo {
+      height: 40px;
+      margin-right: 15px;
+    }
+
+    #header-title {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #f39c12;
+    }
+
+    /* Hauptcontainer */
+    #main-container {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      background-color: #0a0a0a;
+      width: 260px;
+      padding: 20px;
+      flex-shrink: 0;
+      border-right: 1px solid #111;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 20px;
+      font-size: 1em;
+      background: #111;
+      color: #fff;
+      transition: all 0.2s ease;
+    }
+
+    #searchInput:focus {
+      outline: none;
+      background: #1a1a1a;
+    }
+
+    #categories {
+      list-style: none;
+    }
+
+    #categories li {
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      background: #111;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+
+    #categories li:hover,
+    #categories li.active {
+      background: #f39c12;
+      color: #000;
+      font-weight: bold;
+    }
+
+    /* Content */
+    #content {
+      flex-grow: 1;
+      padding: 30px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #itemsGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .itemCard {
+      background: #111;
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .itemCard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(255, 179, 0, 0.4);
+    }
+
+    .itemImage {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 8px;
+      image-rendering: pixelated;
+    }
+
+    .itemName {
+      font-size: 0.95em;
+      text-align: center;
+      color: #f39c12;
+      font-weight: 600;
+    }
+
+    /* Tooltip */
+    .itemCard::after {
+      content: attr(title);
+      position: absolute;
+      background: #222;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.8em;
+      border-radius: 5px;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .itemCard:hover::after {
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      background: #0b0b0b;
+      padding: 20px;
+      text-align: center;
+      border-top: 1px solid #111;
+    }
+
+    footer p {
+      color: #666;
+      font-size: 0.9em;
+      margin: 5px 0;
+    }
+
+    footer a {
+      color: #f39c12;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #main-container {
+        flex-direction: column;
+      }
+
+      #sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #111;
+      }
+
+      #itemsGrid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://example.com/logo.png" alt="WolfTopia Logo" id="header-logo" />
+    <div id="header-title">WolfTopia Item-Liste</div>
+  </header>
+
+  <div id="main-container">
+    <aside id="sidebar">
+      <input type="text" id="searchInput" placeholder="🔍 Suche nach Item..." />
+      <ul id="categories"></ul>
+    </aside>
+
+    <main id="content">
+      <h2 style="margin-bottom: 10px;">Alle Items</h2>
+      <div id="itemsGrid"></div>
+    </main>
+  </div>
+
+  <footer>
+    <p>Ein Projekt von <strong>WolfTopia</strong> • v1.0</p>
+    <p>
+      <a href="https://discord.gg/deinlink" target="_blank">💬 Trete unserem Discord bei</a> |
+      <a href="#">Impressum</a>
+    </p>
+    <p>&copy; 2025 WolfTopia.net – Alle Rechte vorbehalten</p>
+  </footer>
+
+  <script>
+    let allItems = [];
+    let categories = new Set();
+    let selectedCategory = "Alle";
+
+    const searchInput = document.getElementById("searchInput");
+    const categoriesList = document.getElementById("categories");
+    const itemsGrid = document.getElementById("itemsGrid");
+
+    // Ein Item-HTML generieren
+    function createItemHTML(item) {
+      return `
+        <div class="itemCard" title="${item.name}">
+          <img src="${item.texture}" alt="${item.name}" class="itemImage" />
+          <div class="itemName">${item.name}</div>
+        </div>
+      `;
+    }
+
+    // Items filtern und anzeigen
+    function displayItems() {
+      const search = searchInput.value.toLowerCase();
+      const filtered = allItems.filter(item => {
+        const matchCategory = selectedCategory === "Alle" || item.category === selectedCategory;
+        const matchSearch = item.name.toLowerCase().includes(search);
+        return matchCategory && matchSearch;
+      });
+      itemsGrid.innerHTML = filtered.map(createItemHTML).join("");
+    }
+
+    // Kategorien dynamisch aufbauen
+    function displayCategories() {
+      const catList = ["Alle", ...Array.from(categories).sort()];
+      categoriesList.innerHTML = catList
+        .map(cat => `<li class="${cat === selectedCategory ? "active" : ""}">${cat}</li>`)
+        .join("");
+      document.querySelectorAll("#categories li").forEach(li => {
+        li.addEventListener("click", () => {
+          selectedCategory = li.textContent;
+          displayCategories();
+          displayItems();
+        });
+      });
+    }
+
+    // Items aus JSON laden
+    async function loadItems() {
+      try {
+        const res = await fetch("items.json");
+        allItems = await res.json();
+        allItems.forEach(item => categories.add(item.category));
+        displayCategories();
+        displayItems();
+      } catch (err) {
+        console.error("Fehler beim Laden der items.json:", err);
+        itemsGrid.innerHTML = "<p style='color: #f39c12;'>Fehler beim Laden der Items.</p>";
+      }
+    }
+
+    searchInput.addEventListener("input", displayItems);
+    loadItems();
+  </script>
+</body>
+</html>
