@@ -2,18 +2,12 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WolfTopia Items</title>
   <style>
-    /* Grundlegender Reset */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      font-family: Arial, sans-serif;
       background-color: #000;
       color: #fff;
       display: flex;
@@ -21,282 +15,260 @@
       min-height: 100vh;
     }
 
-    /* Header */
     header {
       background-color: #111;
-      padding: 15px 30px;
+      padding: 20px;
       display: flex;
       align-items: center;
-      border-bottom: 2px solid #222;
+      gap: 15px;
     }
 
-    #header-logo {
+    header img {
       height: 40px;
-      margin-right: 15px;
     }
 
-    #header-title {
-      font-size: 1.8em;
-      font-weight: 700;
+    header h1 {
+      margin: 0;
+      font-size: 1.5em;
       color: #f39c12;
     }
 
-    /* Hauptcontainer */
-    #main-container {
+    main {
       display: flex;
-      flex-grow: 1;
+      flex: 1;
     }
 
-    /* Sidebar */
-    #sidebar {
-      background-color: #0a0a0a;
-      width: 260px;
+    nav {
+      width: 220px;
+      background-color: #111;
       padding: 20px;
-      flex-shrink: 0;
-      border-right: 1px solid #111;
+      border-right: 2px solid #222;
     }
 
-    #searchInput {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-      margin-bottom: 20px;
-      font-size: 1em;
-      background: #111;
-      color: #fff;
-      transition: all 0.2s ease;
+    nav h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #f39c12;
     }
 
-    #searchInput:focus {
-      outline: none;
-      background: #1a1a1a;
-    }
-
-    #categories {
+    nav ul {
       list-style: none;
+      padding: 0;
     }
 
-    #categories li {
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      background: #111;
-      border-radius: 6px;
+    nav li {
+      margin-bottom: 10px;
       cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s;
+      transition: color 0.2s ease;
     }
 
-    #categories li:hover,
-    #categories li.active {
-      background: #f39c12;
-      color: #000;
-      font-weight: bold;
+    nav li:hover {
+      color: #f39c12;
     }
 
-    /* Content */
-    #content {
-      flex-grow: 1;
-      padding: 30px;
-      overflow-y: auto;
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .search {
+      margin-bottom: 20px;
+    }
+
+    .items {
       display: flex;
-      flex-direction: column;
-    }
-
-    #itemsGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
     .itemCard {
-      background: #111;
-      border-radius: 12px;
+      background-color: #1a1a1a;
       padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      border-radius: 8px;
+      width: 120px;
+      text-align: center;
       cursor: pointer;
-      position: relative;
+      transition: transform 0.2s;
     }
 
     .itemCard:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 20px rgba(255, 179, 0, 0.4);
+      transform: scale(1.05);
     }
 
     .itemImage {
       width: 64px;
       height: 64px;
-      margin-bottom: 8px;
       image-rendering: pixelated;
     }
 
     .itemName {
-      font-size: 0.95em;
-      text-align: center;
-      color: #f39c12;
-      font-weight: 600;
-    }
-
-    /* Tooltip */
-    .itemCard::after {
-      content: attr(title);
-      position: absolute;
-      background: #222;
-      color: #fff;
-      padding: 5px 10px;
-      font-size: 0.8em;
-      border-radius: 5px;
-      bottom: 110%;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .itemCard:hover::after {
-      opacity: 1;
-    }
-
-    /* Footer */
-    footer {
-      background: #0b0b0b;
-      padding: 20px;
-      text-align: center;
-      border-top: 1px solid #111;
-    }
-
-    footer p {
-      color: #666;
+      margin-top: 8px;
       font-size: 0.9em;
-      margin: 5px 0;
     }
 
-    footer a {
+    footer {
+      background-color: #111;
+      padding: 10px;
+      text-align: center;
+      border-top: 2px solid #222;
+      color: #aaa;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 20px #f39c12aa;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content img {
+      width: 96px;
+      height: 96px;
+      image-rendering: pixelated;
+      margin-bottom: 15px;
+    }
+
+    .modal-content h2 {
       color: #f39c12;
-      text-decoration: none;
+      margin-bottom: 10px;
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    .modal-content p {
+      font-size: 0.95em;
+      margin-bottom: 8px;
+      color: #ccc;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      #main-container {
-        flex-direction: column;
-      }
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 22px;
+      color: #fff;
+      cursor: pointer;
+    }
 
-      #sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #111;
-      }
-
-      #itemsGrid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      }
-
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://example.com/logo.png" alt="WolfTopia Logo" id="header-logo" />
-    <div id="header-title">WolfTopia Item-Liste</div>
+    <img src="https://i.imgur.com/G8D6fHY.png" alt="WolfTopia Logo">
+    <h1>WolfTopia Items</h1>
   </header>
-
-  <div id="main-container">
-    <aside id="sidebar">
-      <input type="text" id="searchInput" placeholder="🔍 Suche nach Item..." />
-      <ul id="categories"></ul>
-    </aside>
-
-    <main id="content">
-      <h2 style="margin-bottom: 10px;">Alle Items</h2>
-      <div id="itemsGrid"></div>
-    </main>
-  </div>
-
+  <main>
+    <nav>
+      <h3>Kategorien</h3>
+      <ul id="categoryList"></ul>
+    </nav>
+    <div class="content">
+      <input class="search" id="searchInput" type="text" placeholder="Suche nach Itemnamen...">
+      <div class="items" id="itemContainer"></div>
+    </div>
+  </main>
   <footer>
-    <p>Ein Projekt von <strong>WolfTopia</strong> • v1.0</p>
-    <p>
-      <a href="https://discord.gg/deinlink" target="_blank">💬 Trete unserem Discord bei</a> |
-      <a href="#">Impressum</a>
-    </p>
-    <p>&copy; 2025 WolfTopia.net – Alle Rechte vorbehalten</p>
+    &copy; 2025 WolfTopia • <a href="https://discord.gg/wolftopia" target="_blank" style="color:#f39c12">Discord beitreten</a>
   </footer>
 
+  <div id="itemModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <img id="modalImage" src="" alt="Item">
+      <h2 id="modalName">Item Name</h2>
+      <p><strong>Kategorie:</strong> <span id="modalCategory"></span></p>
+      <p id="modalDescription"></p>
+    </div>
+  </div>
+
   <script>
-    let allItems = [];
-    let categories = new Set();
-    let selectedCategory = "Alle";
+    let items = [];
 
+    fetch("items.json")
+      .then(response => response.json())
+      .then(data => {
+        items = data;
+        renderCategories();
+        renderItems(items);
+      });
+
+    const categoryList = document.getElementById("categoryList");
+    const itemContainer = document.getElementById("itemContainer");
     const searchInput = document.getElementById("searchInput");
-    const categoriesList = document.getElementById("categories");
-    const itemsGrid = document.getElementById("itemsGrid");
 
-    // Ein Item-HTML generieren
+    function renderCategories() {
+      const categories = [...new Set(items.map(item => item.category))];
+      categoryList.innerHTML = "";
+      categories.forEach(category => {
+        const li = document.createElement("li");
+        li.textContent = category;
+        li.addEventListener("click", () => {
+          const filtered = items.filter(item => item.category === category);
+          renderItems(filtered);
+        });
+        categoryList.appendChild(li);
+      });
+    }
+
+    function renderItems(itemList) {
+      itemContainer.innerHTML = itemList
+        .filter(item => item.name.toLowerCase().includes(searchInput.value.toLowerCase()))
+        .map(item => createItemHTML(item))
+        .join("");
+    }
+
     function createItemHTML(item) {
       return `
-        <div class="itemCard" title="${item.name}">
+        <div class="itemCard" title="${item.name}" onclick='showItemDetails(${JSON.stringify(item).replace(/'/g, "\\'")})'>
           <img src="${item.texture}" alt="${item.name}" class="itemImage" />
           <div class="itemName">${item.name}</div>
         </div>
       `;
     }
 
-    // Items filtern und anzeigen
-    function displayItems() {
-      const search = searchInput.value.toLowerCase();
-      const filtered = allItems.filter(item => {
-        const matchCategory = selectedCategory === "Alle" || item.category === selectedCategory;
-        const matchSearch = item.name.toLowerCase().includes(search);
-        return matchCategory && matchSearch;
-      });
-      itemsGrid.innerHTML = filtered.map(createItemHTML).join("");
+    searchInput.addEventListener("input", () => renderItems(items));
+
+    function showItemDetails(item) {
+      document.getElementById("modalImage").src = item.texture;
+      document.getElementById("modalName").textContent = item.name;
+      document.getElementById("modalCategory").textContent = item.category || "Unbekannt";
+      document.getElementById("modalDescription").textContent = item.description || "Keine Beschreibung vorhanden.";
+      document.getElementById("itemModal").classList.remove("hidden");
     }
 
-    // Kategorien dynamisch aufbauen
-    function displayCategories() {
-      const catList = ["Alle", ...Array.from(categories).sort()];
-      categoriesList.innerHTML = catList
-        .map(cat => `<li class="${cat === selectedCategory ? "active" : ""}">${cat}</li>`)
-        .join("");
-      document.querySelectorAll("#categories li").forEach(li => {
-        li.addEventListener("click", () => {
-          selectedCategory = li.textContent;
-          displayCategories();
-          displayItems();
-        });
-      });
-    }
+    document.querySelector(".close-button").addEventListener("click", () => {
+      document.getElementById("itemModal").classList.add("hidden");
+    });
 
-    // Items aus JSON laden
-    async function loadItems() {
-      try {
-        const res = await fetch("items.json");
-        allItems = await res.json();
-        allItems.forEach(item => categories.add(item.category));
-        displayCategories();
-        displayItems();
-      } catch (err) {
-        console.error("Fehler beim Laden der items.json:", err);
-        itemsGrid.innerHTML = "<p style='color: #f39c12;'>Fehler beim Laden der Items.</p>";
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        document.getElementById("itemModal").classList.add("hidden");
       }
-    }
-
-    searchInput.addEventListener("input", displayItems);
-    loadItems();
+    });
   </script>
 </body>
 </html>
