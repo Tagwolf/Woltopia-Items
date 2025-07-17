@@ -39,7 +39,7 @@
     }
 
     nav {
-      width: 240px;
+      width: 220px;
       background-color: #111;
       padding: 20px;
       border-right: 2px solid #222;
@@ -54,22 +54,25 @@
     nav ul {
       list-style: none;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
     }
 
     nav li {
-      background-color: #1a1a1a;
-      padding: 10px;
-      border: 1px solid #333;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
+      margin-bottom: 10px;
     }
 
-    nav li:hover {
+    nav button {
+      width: 100%;
+      background-color: #222;
+      border: none;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    nav button:hover {
       background-color: #f39c12;
       color: #000;
     }
@@ -83,12 +86,10 @@
       margin-bottom: 20px;
       padding: 10px;
       width: 100%;
-      max-width: 400px;
+      background-color: #111;
       border: 1px solid #f39c12;
       border-radius: 5px;
-      background-color: #111;
-      color: #f39c12;
-      font-size: 1em;
+      color: #fff;
     }
 
     .items {
@@ -114,8 +115,8 @@
     .itemImage {
       width: 100%;
       height: auto;
-      max-width: 96px;
-      max-height: 96px;
+      max-width: 120px;
+      max-height: 120px;
       image-rendering: pixelated;
       margin: 0 auto;
       display: block;
@@ -123,7 +124,7 @@
 
     .itemName {
       margin-top: 8px;
-      font-size: 0.9em;
+      font-size: 0.95em;
     }
 
     footer {
@@ -132,6 +133,7 @@
       text-align: center;
       border-top: 2px solid #222;
       color: #aaa;
+      font-size: 0.9em;
     }
 
     .modal {
@@ -164,9 +166,8 @@
     }
 
     .modal-content img {
-      width: 96px;
-      height: auto;
-      max-height: 96px;
+      width: 128px;
+      height: 128px;
       image-rendering: pixelated;
       margin-bottom: 15px;
     }
@@ -205,7 +206,9 @@
   <main>
     <nav>
       <h3>Kategorien</h3>
-      <ul id="categoryList"></ul>
+      <ul id="categoryList">
+        <li><button onclick="renderItems(items)">Alle</button></li>
+      </ul>
     </nav>
     <div class="content">
       <input class="search" id="searchInput" type="text" placeholder="Suche nach Itemnamen...">
@@ -213,7 +216,7 @@
     </div>
   </main>
   <footer>
-    &copy; 2025 WolfTopia • <a href="https://discord.gg/wolftopia" target="_blank" style="color:#f39c12">Discord beitreten</a>
+    &copy; 2025 WolfTopia • <a href="https://discord.gg/wolftopia" target="_blank" style="color:#f39c12">Discord</a> • <a href="#" style="color:#888">Impressum</a>
   </footer>
 
   <div id="itemModal" class="modal hidden">
@@ -243,14 +246,15 @@
 
     function renderCategories() {
       const categories = [...new Set(items.map(item => item.category))];
-      categoryList.innerHTML = "";
       categories.forEach(category => {
         const li = document.createElement("li");
-        li.textContent = category;
-        li.addEventListener("click", () => {
+        const btn = document.createElement("button");
+        btn.textContent = category;
+        btn.onclick = () => {
           const filtered = items.filter(item => item.category === category);
           renderItems(filtered);
-        });
+        };
+        li.appendChild(btn);
         categoryList.appendChild(li);
       });
     }
